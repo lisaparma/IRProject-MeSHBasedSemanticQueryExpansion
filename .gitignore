@@ -1,0 +1,8 @@
+# MacOS files
+*.DS_Store
+
+# Terrier files
+terrier/
+
+# Ohsumed & MeSH files
+ohsu-trec/
