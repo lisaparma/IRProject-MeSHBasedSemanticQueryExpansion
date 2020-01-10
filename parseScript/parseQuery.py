@@ -1,3 +1,5 @@
+import sys
+
 def parse(filepath):
 	newFile = open(filepath+"Parsed","w")
 	with open(filepath, "r") as fp:
@@ -19,9 +21,10 @@ def parse(filepath):
 				line = fp.readline()
 	newFile.close()
 
-def main():
-	path=input("Enter filepath: ")
+def main(argv):
+	path=sys.argv[1]
 	parse(path)
 
 if __name__ == '__main__':
-    main()
+    main(sys.argv)
+
