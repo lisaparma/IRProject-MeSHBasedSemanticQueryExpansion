@@ -5,8 +5,9 @@ def parse(filepath):
 	with open(filepath, "r") as fp:
 		line = fp.readline()
 		while line:
-			if(".I" in line):
-				newFile.write("<DOC><DOCNO>"+line[3:].rstrip("\n")+"</DOCNO>")
+			if(".U" in line):
+				line1 = fp.readline()
+				newFile.write("<DOC><DOCNO>"+line1.rstrip("\n")+"</DOCNO>")
 				line = fp.readline()
 			if(line == ".T\n"):
 				line = fp.readline()
