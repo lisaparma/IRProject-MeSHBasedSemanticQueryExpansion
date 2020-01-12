@@ -1,26 +1,35 @@
 #!/bin/bash
 
-echo "\n\n ------ SET FILES ------ \n"
-sh terrier/bin/trec_setup.sh parsedFiles/parsedDocs
+# This script set:
+#	- docs to parse (parsedFiles/docs),
+# 	- settings to use (terrier.properties)
+#
+# It also performs indexing returning some helpfull statistics.
 
+echo "\n\n ------ SET FILES ------ \n"
+
+# Setting of docs
+sh terrier/bin/trec_setup.sh parsedFiles/docs
 
 # Overwriting current properties with mine
 mv terrier/etc/terrier.properties terrier/etc/terrier.properties.bak
 cp terrier.properties terrier/etc/terrier.properties
 
-# Remove index dir and create a new one
-if [ -d "./terrier/var/index" ];
-then
-    rm -rf terrier/var/index
-    mkdir terrier/var/index
-else 
-	mkdir terrier/var/index
-fi
 
 # Indexing of collection
 echo "\n\n ------ INDEX CREATION ------ \n"
+
+# Clean index directory
+if [ -d "./terrier/var/index" ];
+then
+    rm -rf terrier/var/index
+fi
+mkdir terrier/var/index
+
+# Perform indexing
 sh terrier/bin/terrier batchindexing
 
-# Indexing stats
+
+# Index stats
 echo "\n\n ------ INDEX STATISTICS ------ \n"
 sh terrier/bin/terrier indexstats
