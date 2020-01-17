@@ -15,6 +15,9 @@ sh terrier/bin/trec_setup.sh parsedFiles/docs
 mv terrier/etc/terrier.properties terrier/etc/terrier.properties.bak
 cp terrier.properties terrier/etc/terrier.properties
 
+# My stoplist
+cp smartStopList.txt terrier/share/smartStopList.txt
+
 
 # Indexing of collection
 echo "\n\n ------ INDEX CREATION ------ \n"

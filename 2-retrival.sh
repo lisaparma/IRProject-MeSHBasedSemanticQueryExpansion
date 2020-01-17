@@ -19,4 +19,4 @@ mkdir terrier/var/results
 sh terrier/bin/terrier batchretrieve \
 	-w BM25 \
 	-t parsedFiles/queries \
-	-q
+	-q 

@@ -1,9 +1,10 @@
 #!/bin/bash
 
-# Original files
-DOCS="originalDocuments/ohsumed.87" 
+echo " \n --> TREC9-TRAIN "
+DOCS="originalDocuments/ohsumed.87"
 QUERIES="originalDocuments/query.ohsu.1-63"
 QRELS="originalDocuments/qrels.ohsu.batch.87"
+
 
 if [ ! -d terrier ];
 then
