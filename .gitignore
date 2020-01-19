@@ -4,7 +4,7 @@
 # Terrier files
 terrier/
 
-# Ohsumed & MeSH files
-ohsu-trec/
-
 parsedFiles/
+
+# Results
+results/

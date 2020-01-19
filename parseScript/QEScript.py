@@ -16,7 +16,7 @@ def queryindex(query):
     return_list = []   
     
     #Removing stop words
-    stopper = StopFilter()
+    stopper = StopFilter(stoplist="../smartStopList.txt")
     tokens = stopper(tokenizer(query))
 
     for t in tokens:

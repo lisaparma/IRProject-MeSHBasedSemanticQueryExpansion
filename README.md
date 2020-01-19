@@ -6,4 +6,6 @@ Project for Information Retrieval university course
 - insert "terrier.project-5.1" directory into this repo
 - rename it as "terrier"
 - Run main.sh
-- Everything is ok :ok_hand:
+- In *results/* directory you can find:
+	- defaultResults.txt: with results about normal retrieval;
+	- queryExpansionResults.txt: with results about query expansion method

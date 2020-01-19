@@ -28,4 +28,4 @@ sh terrier/bin/trec_eval.sh \
 	-m official \
 	parsedFiles/qrels \
 	terrier/var/results/BM25_d_3_t_10_0.res \
-	> defaultResults.txt
+	> results/defaultResults.txt
