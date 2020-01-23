@@ -16,7 +16,14 @@ def queryindex(query):
     return_list = []   
     
     #Removing stop words
-    stopper = StopFilter(stoplist="../smartStopList.txt")
+    with open("../smartStopList.txt", "r") as fp:
+        line = fp.readline()
+        words=[]
+        while line:
+            words.append(line.replace('\n', ''))
+            line = fp.readline()
+
+    stopper = StopFilter(stoplist=frozenset(words))
     tokens = stopper(tokenizer(query))
 
     for t in tokens:
