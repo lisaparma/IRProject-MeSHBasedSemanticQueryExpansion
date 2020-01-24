@@ -9,10 +9,10 @@ def parse(filepath):
 				line1 = fp.readline()
 				newFile.write("<DOC><DOCNO>"+line1.rstrip("\n")+"</DOCNO>")
 				line = fp.readline()
-			else if(line == ".T\n"):
+			if(line == ".T\n"):
 				line = fp.readline()
 				newFile.write("<TITLE>"+line.rstrip("\n")+"</TITLE>")
-			else if(line == ".W\n"):
+			if(line == ".W\n"):
 				line = fp.readline()
 				newFile.write("<ABSTRACT>"+line.rstrip("\n")+"</ABSTRACT></DOC>\n")
 			else:
@@ -26,10 +26,3 @@ def main(argv):
 
 if __name__ == '__main__':
     main(sys.argv)
-
-
-					
-   
-
-	
-	

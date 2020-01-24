@@ -98,7 +98,7 @@ def main():
     QErun4 = open("QueriesExp-run4", "w")
     QErun5 = open("QueriesExp-run5", "w")
 
-    with open("testquery", "r") as fp:
+    with open(sys.argv[1], "r") as fp:
 
         line = fp.readline()
         while line:

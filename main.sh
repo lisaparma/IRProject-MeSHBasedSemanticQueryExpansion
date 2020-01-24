@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo " \n --> TREC9-TRAIN "
+echo "\n --> TREC9-TRAIN "
 DOCS="originalDocuments/ohsumed.87"
 QUERIES="originalDocuments/query.ohsu.1-63"
 QRELS="originalDocuments/qrels.ohsu.batch.87"
@@ -15,15 +15,13 @@ then
 fi
 
 # Parse files
-sh 0-processFiles.sh ${DOCS} ${QUERIES} ${QRELS}
+#sh 0-processFiles.sh ${DOCS} ${QUERIES} ${QRELS}
 
 # Indexing
-sh 1-indexing.sh
+#sh 1-indexing.sh
 
 # Retrival and evaluation of default Queries
 sh 2-defaultRetrieval.sh
 
 # Retrieval and evaluation of expanded queries
-#sh 3-MeSHRetrieval.sh parsedFiles/queries
-
-echo "\n"
+sh 3-MeSHRetrieval.sh parsedFiles/queries
