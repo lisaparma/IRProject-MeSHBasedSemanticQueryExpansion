@@ -10,11 +10,14 @@ class MeSH:
         root = tree.getroot()
         data = {}
         for descriptor in root.iter('DescriptorRecord'):
-            id_descriptor = descriptor.find('DescriptorName/String').text.lower()
+            name_descriptor = descriptor.find('DescriptorName/String').text.lower()
             concepts = {}
             for concept in descriptor.iterfind('ConceptList/Concept'):
-                id_concept = concept.find('ConceptName/String').text
+                name_concept = concept.find('ConceptName/String').text.lower()
                 c_preferred = concept.get('PreferredConceptYN')
+                relationtype = None
+                if c_preferred != 'Y':
+                    relationtype = concept.find('ConceptRelationList/ConceptRelation').get('RelationName')
                 termlist = []
                 for term in concept.iterfind('TermList/Term'):
                     termlist.append({
@@ -22,12 +25,13 @@ class MeSH:
                         "preferred": term.get('ConceptPreferredTermYN')
                     })
 
-                concepts[id_concept] = {
-                    "name": id_concept,
+                concepts[name_concept] = {
+                    "name": name_concept,
                     "preferred": c_preferred,
+                    "relationtype": relationtype,
                     "termlist": termlist
                 }
-            data[id_descriptor] = concepts
+            data[name_descriptor] = concepts
 
         self.map = data
 
