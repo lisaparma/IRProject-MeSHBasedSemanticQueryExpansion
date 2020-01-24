@@ -5,14 +5,14 @@ def parse(filepath):
 	with open(filepath, "r") as fp:
 		line = fp.readline()
 		while line:
-			if(".U" in line):
+			if(line == ".U\n"):
 				line1 = fp.readline()
 				newFile.write("<DOC><DOCNO>"+line1.rstrip("\n")+"</DOCNO>")
 				line = fp.readline()
-			if(line == ".T\n"):
+			else if(line == ".T\n"):
 				line = fp.readline()
 				newFile.write("<TITLE>"+line.rstrip("\n")+"</TITLE>")
-			if(line == ".W\n"):
+			else if(line == ".W\n"):
 				line = fp.readline()
 				newFile.write("<ABSTRACT>"+line.rstrip("\n")+"</ABSTRACT></DOC>\n")
 			else:
