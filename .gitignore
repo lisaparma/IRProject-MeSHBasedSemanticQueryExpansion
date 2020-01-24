@@ -5,3 +5,6 @@
 terrier/
 
 parsedFiles/
+__pycache__/
+.idea/
+desc2020.xml

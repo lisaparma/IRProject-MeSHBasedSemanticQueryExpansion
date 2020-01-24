@@ -5,11 +5,64 @@ from whoosh.lang.porter import stem
 from whoosh.lang.morph_en import variations
 from whoosh.analysis import StopFilter
 
-def searchMESHConcept(word):
-    return "plop"
+from MeSH import MeSH
 
-def inMESH(word):
-    return True
+data = MeSH("desc2020.xml").map
+
+def findPreferredTerm(concept):
+    for term in concept["termlist"]:
+        if term["preferred"] == "Y":
+            return term["name"]
+    print("ERROR: preferred term in " + concept["name"] + " not found !!!")
+    return None
+
+
+def findPreferredConcept(descriptor):
+    for concept in descriptor:
+        if descriptor[concept]["preferred"] == "Y":
+            return descriptor[concept]["name"]
+    print("ERROR: preferred concept in " + descriptor["name"] + " not found !!!")
+    return None
+
+def mesh(word):
+    termsToAdd = []      # Array to fill with terms to add to query (point 3)
+    conceptsToAdd = []   # Array to fill with concepts to add to query (point 4)
+
+    for descriptor in data.keys():
+
+        findConcept = False
+        for concept in data[descriptor]:
+            findTerm = False
+            # word is in TermList ?
+            for term in data[descriptor][concept]["termlist"]:
+                if term["name"].startswith(word):
+                    findTerm = True
+
+            if findTerm == True:
+                prefTerm = findPreferredTerm(data[descriptor][concept])
+                for part in prefTerm.replace(",", "").split(" "):
+                    termsToAdd.append(part)
+                                     
+                # word is also in concept name ?
+                if word in data[descriptor][concept]["name"]:
+                    findConcept = True
+                    
+
+        if findConcept == True:
+            prefConcept = findPreferredConcept(data[descriptor])
+            for part in prefConcept.replace(",", "").split(" "):
+                conceptsToAdd.append(part)
+    '''
+    print("--> " + word)
+    print("TERMS:")
+    for term in termsToAdd:
+        print("\t" + term)
+
+    print("CONCEPTS:")
+    for concept in conceptsToAdd:
+        print("\t" + concept)
+    '''
+    return (termsToAdd, conceptsToAdd)
 
 def queryindex(query):
     tokenizer = RegexTokenizer()
@@ -32,31 +85,23 @@ def queryindex(query):
         #stemming
         s=stem(t.text)
         return_list.append(s)
-        #adding variations
-        #termVariations = variations(t.text)
-        #for u in termVariations:
-        #   return_list.append(u)
     return return_list
 
 def doExpansion(query):
     words = queryindex(query)
+    terms = []
     concepts = []
     for word in words:
-        if(inMESH(word)):
-            print(word + " --> in MeSH")
-            concept = searchMESHConcept(word)
-            print("\tConcept: " + concept)
-            concepts.append(concept)
-        else:
-            print(word + " --> NOT in MeSH")
-    conceptsString =' '.join(concepts)
-    return conceptsString
+        termsToAdd, conceptsToAdd = mesh(word)
+        terms = terms + termsToAdd
+        concepts = concepts + conceptsToAdd
+    return ' '.join(list(set(terms)))
 
 
 def main():
     print("\n\n")
-    newFile = open(sys.argv[1]+"QueryExpansion","w")
-    with open(sys.argv[1], "r") as fp:
+    newFile = open("queryExpansioned","w")
+    with open("testquery", "r") as fp:
         line = fp.readline()
         while line:
             if("<num>" in line):
