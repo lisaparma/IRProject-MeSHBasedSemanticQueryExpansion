@@ -15,10 +15,10 @@ then
 fi
 
 # Parse files
-#sh 0-processFiles.sh ${DOCS} ${QUERIES} ${QRELS}
+sh 0-processFiles.sh ${DOCS} ${QUERIES} ${QRELS}
 
 # Indexing
-#sh 1-indexing.sh
+sh 1-indexing.sh
 
 # Retrival and evaluation of default Queries
 sh 2-defaultRetrieval.sh

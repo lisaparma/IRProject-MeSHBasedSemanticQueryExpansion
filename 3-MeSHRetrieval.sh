@@ -7,9 +7,23 @@ echo "\n\n ------ QUERY EXPANSION RETRIEVAL ------ \n"
 # Perform query expansion
 echo "\t --> Query expansion of $1"
 python3 queryExpansionScript/QueryExpansionScript.py $1
+mv QueriesExp-run2 parsedFiles/queriesExp-run2
 mv QueriesExp-run3 parsedFiles/queriesExp-run3
 mv QueriesExp-run4 parsedFiles/queriesExp-run4
 mv QueriesExp-run5 parsedFiles/queriesExp-run5
+
+# RUN 2
+sh terrier/bin/terrier batchretrieve \
+	-w BM25 \
+	-t parsedFiles/queriesExp-run2 \
+	-Dtrec.results.file=bm25_run2.res
+
+sh terrier/bin/trec_eval.sh \
+	-m official \
+	parsedFiles/qrels \
+	terrier/var/results/bm25_run2.res \
+	> results/QErun2-results.txt
+echo "\t --> Printed QErun2-results.txt"
 
 
 # RUN 3
