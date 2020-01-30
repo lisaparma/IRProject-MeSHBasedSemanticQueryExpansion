@@ -8,6 +8,23 @@ from MeSH import MeSH
 
 data = MeSH("desc2020.xml").map
 
+from Bio import Entrez
+Entrez.email = "lisa.parma@studenti.unipd.it"
+
+def isMeSH(word):
+    find = False
+    handle = Entrez.esearch(db="mesh", term=word)
+    record = Entrez.read(handle)
+
+    if u'TranslationStack' in record:
+        for x in record[u'TranslationStack']:
+            for y in x:
+                if y == 'Field':
+                    if x[y] == 'MeSH Terms':
+                        find = True
+    handle.close()
+    return find
+
 
 def findPreferredTerm(concept):
     for term in concept["termlist"]:
@@ -26,7 +43,7 @@ def findPreferredConcept(descriptor):
 
 
 def mesh(word):
-    termsToAdd = []      # Array to fill with terms to add to query (point 3)
+    preferredTermsToAdd = []      # Array to fill with terms to add to query (point 3)
     conceptsToAdd = []   # Array to fill with concepts to add to query (point 4)
 
     for descriptor in data.keys():
@@ -40,8 +57,9 @@ def mesh(word):
 
             if findTerm == True:
                 prefTerm = findPreferredTerm(data[descriptor][concept])
+                print("\t" + prefTerm)
                 for part in prefTerm.split(", "):
-                    termsToAdd.append(part)
+                    preferredTermsToAdd.append(part)
                                      
                 # word is also in concept name ?
                 if word in data[descriptor][concept]["name"]:
@@ -52,7 +70,7 @@ def mesh(word):
             for part in prefConcept.split(", "):
                 conceptsToAdd.append(part)
 
-    return (termsToAdd, conceptsToAdd)
+    return (preferredTermsToAdd, conceptsToAdd)
 
 
 def queryIndex(query):
@@ -62,7 +80,7 @@ def queryIndex(query):
     # Removing stop words
     with open("../smartStopList.txt", "r") as fp:
         line = fp.readline()
-        words=[]
+        words = []
         while line:
             words.append(line.replace('\n', ''))
             line = fp.readline()
@@ -74,7 +92,7 @@ def queryIndex(query):
         t.text = t.text.lower()  # Converting to lower case
         s = stem(t.text)  # stemming
         if len(s) > 2:
-            return_list.append(s)
+            return_list.append((t.text, s))
     return return_list
 
 
@@ -83,9 +101,15 @@ def doExpansion(query):
     terms = []
     concepts = []
     for word in words:
-        termsToAdd, conceptsToAdd = mesh(word)
-        terms = terms + termsToAdd
-        concepts = concepts + conceptsToAdd
+        print("\n" + word[0])
+        find = isMeSH(word[1])
+        if find is True:
+            print("is MeSH")
+            termsToAdd, conceptsToAdd = mesh(word[0])
+            terms = terms + termsToAdd
+            concepts = concepts + conceptsToAdd
+        else:
+            print("NOT")
 
     listRun3 = ' '.join(list(set(terms)))
     listRun4 = ' '.join(list(set(concepts)))
